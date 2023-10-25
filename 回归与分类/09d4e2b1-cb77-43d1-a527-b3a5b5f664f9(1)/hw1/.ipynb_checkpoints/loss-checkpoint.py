@@ -34,16 +34,11 @@ class SoftmaxCrossEntropyLoss(object):
         # Hint: Maybe you need to save some arrays for gradient computing.
 
         ############################################################################
-        loss = 0
-        acc = 0
-        print("*"*10 + "forward" + "*"*10)
-        all_x = Input.T
-        print(all_x.shape)
+
 
         return loss, acc
 
     def gradient_computing(self):
-        pass
 
         ############################################################################
         # TODO: Put your code here
@@ -59,7 +54,5 @@ class SoftmaxCrossEntropyLoss(object):
         """
         raw_std = (2 / (self.num_input + self.num_output))**0.5
         init_std = raw_std * (2**0.5)
-        # 784,10
         self.W = np.random.normal(0, init_std, (self.num_input, self.num_output))
-        #1 10
         self.b = np.random.normal(0, init_std, (1, self.num_output))

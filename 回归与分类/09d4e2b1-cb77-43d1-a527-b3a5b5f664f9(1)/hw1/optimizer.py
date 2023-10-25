@@ -11,6 +11,7 @@ class SGD(object):
 
         layer = self.model
         if layer.trainable:
+            pass
 
             ############################################################################
             # TODO: Put your code here

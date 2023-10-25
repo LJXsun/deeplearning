@@ -42,12 +42,27 @@ class Solver(object):
         max_epoch = self.cfg['max_epoch']
 
         epoch_train_loss, epoch_train_acc = [], []
+        i = 0
+        print("max_epoch =",max_epoch)
         for epoch in range(max_epoch):
 
             iteration_train_loss, iteration_train_acc = [], []
+     
             for iteration, (images, labels) in enumerate(self.train_loader):
+            
                 # forward pass
                 loss, acc = self.model.forward(images, labels)
+                if i == 0:
+                    print(images)
+                    print(type(images))
+                    #<class 'numpy.ndarray'>
+                    print(images.shape)
+                    #说明一列是一个样本，一个样本784个特征
+                    # (100, 784)
+                    print(labels)
+                    print(type(labels))
+                    i += 1
+                    break
 
                 self.model.gradient_computing()
 
