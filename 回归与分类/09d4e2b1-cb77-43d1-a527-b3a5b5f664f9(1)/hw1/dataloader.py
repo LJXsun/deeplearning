@@ -39,6 +39,7 @@ class Dataset(object):
         self.num_classes = 10
 
     def __len__(self):
+        #查看图片的数量
         return len(self.images)
 
     def __getitem__(self, idx):
@@ -63,9 +64,11 @@ class IterationBatchSampler(object):
         indices = np.arange(len(self.dataset))
 
         if self.shuffle:
+            #随机打乱数组元素顺序
             np.random.shuffle(indices)
 
         num_iteration = len(indices) // self.batch_size + int(len(indices) % self.batch_size)
+        #np.split进行切分，返回列表
         self.batch_indices = np.split(indices, num_iteration)
 
     def __iter__(self):
@@ -83,7 +86,7 @@ class Dataloader(object):
 
     def __iter__(self):
         self.sampler.prepare_epoch_indices()
-
+        # 划分数据集，减少计算开销
         for batch_indices in self.sampler:
             batch_images = []
             batch_labels = []
