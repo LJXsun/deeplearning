@@ -24,6 +24,7 @@ class SoftmaxCrossEntropyLoss(object):
         Inputs: (minibatch)
         - Input: (batch_size, 784)
         - labels: the ground truth label, shape (batch_size, )
+        Input 100 784
         """
 
         ############################################################################
@@ -37,9 +38,13 @@ class SoftmaxCrossEntropyLoss(object):
         loss = 0
         acc = 0
         print("*"*10 + "forward" + "*"*10)
-        all_x = Input.T
+        all_x = Input.T # 784 100
         print(all_x.shape)
-
+        print(self.W.shape)
+        print(self.b.shape)
+        ans = self.W.T * all_x + self.b
+        print(ans.shape)
+        np.asarray(tuple1)
         return loss, acc
 
     def gradient_computing(self):
