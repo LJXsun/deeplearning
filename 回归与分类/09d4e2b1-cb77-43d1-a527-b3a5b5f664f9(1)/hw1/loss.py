@@ -18,7 +18,15 @@ class SoftmaxCrossEntropyLoss(object):
         self.num_output = num_output
         self.trainable = trainable
         self.XavierInit()
-
+    def one_hot(self,):
+        # one-hot
+        t = np.zeros((softmax.shape[1],softmax.shape[0]))
+        t[range(0,softmax.shape[1]),labels] = 1
+        #print("labels[0] =",labels[0])
+        #print("t[0] =",t[0])
+        t = t.T
+        return 
+    
     def forward(self, Input, labels):
         """
         Inputs: (minibatch)
@@ -38,39 +46,49 @@ class SoftmaxCrossEntropyLoss(object):
         loss = 0
         acc = 0
         print("*"*10 + "forward" + "*"*10)
-        all_x = Input.T # 784 100
+        self.input = Input
+        #all_x = Input.T # 784 100
         #print(all_x.shape)
         #print(self.W.shape) 784 10
         #print(self.b.shape) 1 10
-        z = np.dot(self.W.T,all_x)+self.b.T
+        z = np.dot(self.W.T,Input.T )+self.b.T
         #print(z.shape) 10 100
         exp = np.exp(z)
         #print("exp.shape=",exp.shape) # exp.shape= (10, 100)
         sum_exp = np.sum(exp,axis=0,keepdims = True)
         #print("sum_exp.shape=",sum_exp.shape) # sum_exp.shape= (1, 100)
         softmax = exp/sum_exp
+        self.softmax = softmax
         #print("softmax.shape",softmax.shape) # softmax.shape (10, 100)
         #print("labels.shape",labels.shape)  #labels.shape (100,)
-        
-        # one-hot
         t = np.zeros((softmax.shape[1],softmax.shape[0]))
         t[range(0,softmax.shape[1]),labels] = 1
         #print("labels[0] =",labels[0])
         #print("t[0] =",t[0])
         t = t.T
+        self.t = t
+        
         #print(t.shape) #(10, 100)
         tmp = t*np.log(softmax)
         # print("tmp.shape =",tmp.shape) #tmp.shape = (10, 100)
         tmp_sum = np.sum(tmp,axis=0,keepdims = True)
         #print("tmp_sum.shape =",tmp_sum.shape) # tmp_sum.shape = (1, 100)
         #print("Input.shape[0] =",Input.shape[0]) # Input.shape[0] = 100
-        tmp2_sum = -np.sum(tmp_sum,axis=1,keepdims = True)/Input.shape[0]
-        print("tmp2_sum =",tmp2_sum)
+        #计算损失值
+        loss = -np.sum(tmp_sum,axis=1,keepdims = True)/Input.shape[0]
+        print("loss =",loss)
+        tmp2 = np.argmax(softmax,axis=0)
+        #print(tmp2.shape)
+        #print("tmp2 =",tmp2)
+        #计算准确率
+        #print(np.mean(tmp2==labels))
+        #result=np.sum(tmp2==labels)/len(labels)
+        #print("result =",result)
+        #两种方法都可以
+        acc = np.mean(tmp2==labels)
         return loss, acc
 
     def gradient_computing(self):
-        pass
-
         ############################################################################
         # TODO: Put your code here
         # Calculate the gradient of W and b.
@@ -78,6 +96,13 @@ class SoftmaxCrossEntropyLoss(object):
         # self.grad_W = 
         # self.grad_b =
         ############################################################################
+        self.grad_W = np.dot((self.softmax-self.t),self.input)/self.input.shape[0]
+        self.grad_b = np.average((self.softmax-self.t),axis=1)
+        print("self.grad_W.shape =",self.grad_W.shape) #self.grad_W.shape = (10, 784)
+        print("self.grad_b.shape =",self.grad_b.shape)
+        
+        #pass
+        
     # 初始化w和b权重
     def XavierInit(self):
         """

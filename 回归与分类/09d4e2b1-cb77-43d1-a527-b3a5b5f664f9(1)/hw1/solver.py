@@ -52,6 +52,8 @@ class Solver(object):
             
                 # forward pass
                 loss, acc = self.model.forward(images, labels)
+                #计算梯度
+                self.model.gradient_computing()
                 if i == 0:
                     print(images)
                     print(type(images))
@@ -63,8 +65,7 @@ class Solver(object):
                     print(type(labels))
                     i += 1
                     break
-
-                self.model.gradient_computing()
+                
 
                 # updata the model weights
                 self.optimizer.step()
