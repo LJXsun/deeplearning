@@ -44,27 +44,31 @@ class Solver(object):
         epoch_train_loss, epoch_train_acc = [], []
         i = 0
         print("max_epoch =",max_epoch)
+        # 训练多少次
         for epoch in range(max_epoch):
 
             iteration_train_loss, iteration_train_acc = [], []
-     
+             # 将样本分批取出然后训练，减少计算机的开销
             for iteration, (images, labels) in enumerate(self.train_loader):
-            
+                #print("iteration =",iteration)
                 # forward pass
                 loss, acc = self.model.forward(images, labels)
+#                 print("loss =",loss)
+#                 print("type(loss) =",type(loss))
+#                 print("acc = ",acc)
                 #计算梯度
                 self.model.gradient_computing()
-                if i == 0:
-                    print(images)
-                    print(type(images))
-                    #<class 'numpy.ndarray'>
-                    print(images.shape)
-                    #说明一列是一个样本，一个样本784个特征
-                    # (100, 784)
-                    print(labels)
-                    print(type(labels))
-                    i += 1
-                    break
+#                 if i == 0:
+#                     print(images)
+#                     print(type(images))
+#                     #<class 'numpy.ndarray'>
+#                     print(images.shape)
+#                     #说明一列是一个样本，一个样本784个特征
+#                     # (100, 784)
+#                     print(labels)
+#                     print(type(labels))
+#                     i += 1
+#                     break
                 
 
                 # updata the model weights
@@ -73,29 +77,31 @@ class Solver(object):
                 # restore loss and accuracy
                 iteration_train_loss.append(loss)
                 iteration_train_acc.append(acc)
-
-                # display iteration training info
+                # 展示一轮中一批数据每隔50次训练的情况
+                # display iteration training info  
                 if iteration % self.cfg['display_freq'] == 0:
                     print("Epoch [{}][{}]\t Batch [{}][{}]\t Training Loss {:.4f}\t Accuracy {:.4f}".format(
                         epoch, max_epoch, iteration, len(self.train_loader), loss, acc))
-
+            # 该轮训练的平均损失值和平均准确度
             avg_train_loss, avg_train_acc = np.mean(iteration_train_loss), np.mean(iteration_train_acc)
             epoch_train_loss.append(avg_train_loss)
             epoch_train_acc.append(avg_train_acc)
-
-            # validate
+            # 
+            
+            # validate 该轮验证集的平均损失值和平均准确度
             avg_val_loss, avg_val_acc = self.validate()
-
+            
+            # 输出该轮的训练集的平均损失值和平均准确率
             # display epoch training info
             print('\nEpoch [{}]\t Average training loss {:.4f}\t Average training accuracy {:.4f}'.format(
                 epoch, avg_train_loss, avg_train_acc))
-
+            # 输出该轮的验证集集的平均损失值和平均准确率
             # display epoch valiation info
             print('Epoch [{}]\t Average validation loss {:.4f}\t Average validation accuracy {:.4f}\n'.format(
                 epoch, avg_val_loss, avg_val_acc))
 
         return epoch_train_loss, epoch_train_acc
-
+    # 求出验证集的平均损失值和平均准确度
     def validate(self):
         loss_set, acc_set = [], []
         for images, labels in self.val_loader:
@@ -106,14 +112,13 @@ class Solver(object):
         loss = np.mean(loss_set)
         acc = np.mean(acc_set)
         return loss, acc
-
+    # 求出验证集的平均损失值和平均准确度
     def test(self):
         loss_set, acc_set = [], []
         for images, labels in self.test_loader:
             loss, acc = self.model.forward(images, labels)
-            loss_set.append(logits)
+            loss_set.append(loss)
             acc_set.append(acc)
-
         loss = np.mean(loss_set)
         acc = np.mean(acc_set)
         return loss, acc

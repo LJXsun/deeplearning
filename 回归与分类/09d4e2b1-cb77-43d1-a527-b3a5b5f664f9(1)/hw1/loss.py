@@ -18,14 +18,15 @@ class SoftmaxCrossEntropyLoss(object):
         self.num_output = num_output
         self.trainable = trainable
         self.XavierInit()
-    def one_hot(self,):
+        
+    def one_hot(self):
         # one-hot
         t = np.zeros((softmax.shape[1],softmax.shape[0]))
         t[range(0,softmax.shape[1]),labels] = 1
         #print("labels[0] =",labels[0])
         #print("t[0] =",t[0])
         t = t.T
-        return 
+        return t
     
     def forward(self, Input, labels):
         """
@@ -45,10 +46,10 @@ class SoftmaxCrossEntropyLoss(object):
         ############################################################################
         loss = 0
         acc = 0
-        print("*"*10 + "forward" + "*"*10)
+        #print("*"*10 + "forward" + "*"*10)
         self.input = Input
         #all_x = Input.T # 784 100
-        #print(all_x.shape)
+        #print(Input.T .shape)
         #print(self.W.shape) 784 10
         #print(self.b.shape) 1 10
         z = np.dot(self.W.T,Input.T )+self.b.T
@@ -75,8 +76,9 @@ class SoftmaxCrossEntropyLoss(object):
         #print("tmp_sum.shape =",tmp_sum.shape) # tmp_sum.shape = (1, 100)
         #print("Input.shape[0] =",Input.shape[0]) # Input.shape[0] = 100
         #计算损失值
-        loss = -np.sum(tmp_sum,axis=1,keepdims = True)/Input.shape[0]
-        print("loss =",loss)
+        loss = -np.sum(tmp_sum,axis=1)/Input.shape[0]
+        
+        #print("loss =",loss)
         tmp2 = np.argmax(softmax,axis=0)
         #print(tmp2.shape)
         #print("tmp2 =",tmp2)
@@ -86,7 +88,7 @@ class SoftmaxCrossEntropyLoss(object):
         #print("result =",result)
         #两种方法都可以
         acc = np.mean(tmp2==labels)
-        return loss, acc
+        return loss[0], acc
 
     def gradient_computing(self):
         ############################################################################
@@ -98,8 +100,8 @@ class SoftmaxCrossEntropyLoss(object):
         ############################################################################
         self.grad_W = np.dot((self.softmax-self.t),self.input)/self.input.shape[0]
         self.grad_b = np.average((self.softmax-self.t),axis=1)
-        print("self.grad_W.shape =",self.grad_W.shape) #self.grad_W.shape = (10, 784)
-        print("self.grad_b.shape =",self.grad_b.shape)
+        #print("self.grad_W.shape =",self.grad_W.shape) #self.grad_W.shape = (10, 784)
+        #print("self.grad_b.shape =",self.grad_b.shape)
         
         #pass
         

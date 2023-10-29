@@ -69,6 +69,7 @@ class IterationBatchSampler(object):
 
         num_iteration = len(indices) // self.batch_size + int(len(indices) % self.batch_size)
         #np.split进行切分，返回列表
+        print(num_iteration)
         self.batch_indices = np.split(indices, num_iteration)
 
     def __iter__(self):
