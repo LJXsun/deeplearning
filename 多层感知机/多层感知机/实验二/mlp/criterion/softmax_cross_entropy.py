@@ -21,9 +21,9 @@ class SoftmaxCrossEntropyLossLayer():
 	    # TODO: 
 		# 在minibatch内计算平均准确率和损失，分别保存在self.accu和self.loss里(将在solver.py里自动使用)
 		# 只需要返回self.loss
-
-
 	    ############################################################################
+        np.exp()
+        
 
 		return self.loss
 

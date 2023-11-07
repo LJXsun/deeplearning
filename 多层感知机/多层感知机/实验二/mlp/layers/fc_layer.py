@@ -30,8 +30,10 @@ class FCLayer():
 	    # TODO: 
 		# 对输入计算Wx+b并返回结果.
 
-
 	    ############################################################################
+    print("FCLayer - forward")
+    print(np.dot(self.W.T,Input).shape)
+    return np.dot(self.W.T,Input) + self.b
 
 
 	def backward(self, delta):
@@ -39,7 +41,6 @@ class FCLayer():
 		############################################################################
 	    # TODO: 
 		# 根据delta计算梯度
-
 
 	    ############################################################################
 
@@ -53,6 +54,7 @@ class FCLayer():
 			init_std = raw_std
 		else:
 			init_std = raw_std # * 4
-
+      #(784,128)
 		self.W = np.random.normal(0, init_std, (self.num_input, self.num_output))
+      #（1，128）
 		self.b = np.random.normal(0, init_std, (1, self.num_output))
