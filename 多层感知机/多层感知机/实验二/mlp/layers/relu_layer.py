@@ -15,7 +15,8 @@ class ReLULayer():
 	    # TODO: 
 		# 对输入应用ReLU激活函数并返回结果
      # np.maximum用于逐元素比较两个array的大小。
-    return np.maximum(0,Input)
+		self.Input = Input
+		return np.maximum(0,Input)
 
 	    ############################################################################
 
@@ -26,5 +27,6 @@ class ReLULayer():
 	    # TODO: 
 		# 根据delta计算梯度
 
-
+		delta[self.Input<0]=0
+		return delta
 	    ############################################################################
